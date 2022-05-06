@@ -31,7 +31,14 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public boolean updateCompany(Company company) {
         boolean isUpdated = false;
-        System.out.println("Это ДЗ");
+       // System.out.println("Это ДЗ");
+        try {
+            if (companyDao.updateCompany(company))
+                isUpdated = true;
+        }
+        catch (HibernateError e) {
+            ShowException.showNotice(e);
+        }
         return isUpdated;
     }
 
