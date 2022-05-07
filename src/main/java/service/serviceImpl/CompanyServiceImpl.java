@@ -6,6 +6,7 @@ import entity.Company;
 import exception.ShowException;
 import org.hibernate.HibernateError;
 import service.CompanyService;
+import sessionFactory.SessionFactoryImpl;
 
 import java.util.List;
 
@@ -52,15 +53,24 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<Company> showCompanies() {
         System.out.println("Это ДЗ");
-        // return companies;
-        return null;
+        List<Company> companies = (List<Company>) SessionFactoryImpl.getSessionFactory().openSession().createQuery("FROM Company").list();
+        return companies;
+
+       // return null;
     }
 
     @Override
     public Company findCompanyById(int id) {
-        System.out.println("Это ДЗ");
-        //return company;
-        return null;
+        System.out.println("Это ДЗ+");
+        Company company = null;
+        try{
+            company = companyDao.findCompanyById(id);
+        }
+        catch (HibernateError e){
+            ShowException.showNotice(e);
+        }
+        return company;
+        //return null;
     }
 
     @Override
