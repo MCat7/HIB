@@ -55,6 +55,12 @@ public class CompanyDaoImpl implements CompanyDao {
         boolean isDeleted = false;
         try {
             // Тут нужно удаление
+            Session session = SessionFactoryImpl.getSessionFactory().openSession();
+            Company company = session.load(Company.class, id);
+            Transaction tx = session.beginTransaction();
+            session.delete(company);
+            tx.commit();
+            session.close();
             isDeleted = true;
         }
         catch (NoClassDefFoundError e) {
