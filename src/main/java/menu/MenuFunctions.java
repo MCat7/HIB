@@ -167,7 +167,7 @@ public class MenuFunctions {
     private boolean getPersonId(String id) {
         boolean isAppropriateNumber = false;
         //   if (Validator.correctId(id)) {
-        if (!(Integer.parseInt(id) < 0) && !(Integer.parseInt(id) > getPeople().size())) {
+        if (!(Integer.parseInt(id) < 0)){ // && !(Integer.parseInt(id) > getPeople().size())) {
             isAppropriateNumber = true;
         }
         else {
@@ -271,7 +271,7 @@ public class MenuFunctions {
     private boolean getCompanyId(String id) {
         boolean isAppropriateNumber = false;
         //   if (Validator.correctId(id)) {
-        if (!(Integer.parseInt(id) < 0) && !(Integer.parseInt(id) > getCompanies().size())) {
+        if (!(Integer.parseInt(id) < 0)) { //&& !(Integer.parseInt(id) > getCompanies().size())) {
             isAppropriateNumber = true;
         }
         else {
@@ -326,8 +326,9 @@ public class MenuFunctions {
         String name = in.nextLine();
         boolean isFound = false;
         for (Company c : getCompanies()) {
-            if (c.getCompanyName().equals(name)) {
+            if (c.getCompanyName().toLowerCase().contains(name.toLowerCase())) {
                 isFound = true;
+                name = c.getCompanyName();
             }
         }
         Company company = null;
@@ -515,7 +516,7 @@ public class MenuFunctions {
             }
         }
         else {
-            System.out.println("Нет пользователей!");
+            System.out.println("Нет машин!");
         }
     }
 
