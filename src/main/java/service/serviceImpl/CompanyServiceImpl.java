@@ -5,9 +5,14 @@ import dao.daoImpl.CompanyDaoImpl;
 import entity.Company;
 import exception.ShowException;
 import org.hibernate.HibernateError;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import service.CompanyService;
 import sessionFactory.SessionFactoryImpl;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class CompanyServiceImpl implements CompanyService {
@@ -79,8 +84,14 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company findCompanyByName(String name) {
-        System.out.println("Это ДЗ");
-        //  return company;
-        return null;
+        System.out.println("Это ДЗ CompanyServiceImpl.findCompanyByName");
+        Company company = null;
+        try {
+           company = companyDao.findCompanyByName(name);
+        } catch (NoClassDefFoundError e) {
+            System.out.println("Exception: " + e);
+        }
+        return company;
+        //return null;
     }
 }

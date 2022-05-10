@@ -94,7 +94,15 @@ public class CompanyDaoImpl implements CompanyDao {
     public Company findCompanyByName(String name) {
         Company company = null;
         try {
-            // Тут нужен поиск по имени
+            Session session = SessionFactoryImpl.getSessionFactory().openSession();
+            Transaction tx = session.beginTransaction();
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Company> cr = cb.createQuery(Company.class);
+            Root<Company> root = cr.from(Company.class);
+            cr.select(root).where(cb.equal(root.get("companyName"), name));
+            company = session.createQuery(cr).getSingleResult();
+            tx.commit();
+            session.close();
         }
         catch (NoClassDefFoundError e) {
             System.out.println("Exception: " + e);
