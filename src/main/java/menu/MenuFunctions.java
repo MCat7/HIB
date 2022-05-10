@@ -19,7 +19,8 @@ public class MenuFunctions {
     PersonService personService = new PersonServiceImpl();
     CompanyService companyService = new CompanyServiceImpl();
 
-    public MenuFunctions() { }
+    public MenuFunctions() {
+    }
 
     //---PERSON AND USER---//
 
@@ -51,8 +52,7 @@ public class MenuFunctions {
             person = new Person(name, surname, Integer.parseInt(age), phone, mail);
             user.setPerson(person);
             person.setUser(user);
-        }
-        else {
+        } else {
             System.out.println("Пароль или логин не корректны!");
         }
       /*  }
@@ -69,10 +69,9 @@ public class MenuFunctions {
         System.out.print("Введите пароль пользователя: ");
         String password = in.nextLine();
         //  if(Validator.correctUser(login, password)) {
-        if(checkUniqueLogin(login)) {
+        if (checkUniqueLogin(login)) {
             user = new User(login, password, "User");
-        }
-        else {
+        } else {
             System.out.println("Такой логин уже занят!");
         }
         //}
@@ -167,10 +166,9 @@ public class MenuFunctions {
     private boolean getPersonId(String id) {
         boolean isAppropriateNumber = false;
         //   if (Validator.correctId(id)) {
-        if (!(Integer.parseInt(id) < 0)){ // && !(Integer.parseInt(id) > getPeople().size())) {
+        if (!(Integer.parseInt(id) < 0)) { // && !(Integer.parseInt(id) > getPeople().size())) {
             isAppropriateNumber = true;
-        }
-        else {
+        } else {
             System.out.println("Такого ID нет!");
         }
        /* }
@@ -184,7 +182,7 @@ public class MenuFunctions {
         List<Person> people = getPeople();
         if (people.size() != 0) {
             System.out.format("%10s%20s%20s%10s%20s%30s%20s", "ID |", "Имя |", "Фамилия |", "Возраст |", "Телефон |", "Почта |", "Логин |");
-            for (Person p: people) {
+            for (Person p : people) {
                 System.out.println(" ");
                 System.out.format("%10s%20s%20s%10s%20s%30s%20s", p.getPersonId() + " |", p.getName() + " |",
                         p.getSurname() + " |", p.getAge() + " |",
@@ -192,8 +190,7 @@ public class MenuFunctions {
 
             }
             System.out.println(" ");
-        }
-        else {
+        } else {
             System.out.println("Нет пользователей!");
         }
     }
@@ -262,7 +259,7 @@ public class MenuFunctions {
         System.out.print("Введите ID компании для удаления: ");
         String id = in.nextLine();
         if (getCompanyId(id)) {
-            if(companyService.deleteCompany(Integer.parseInt(id))) {
+            if (companyService.deleteCompany(Integer.parseInt(id))) {
                 System.out.println("---Удаление выполнено!---");
             }
         }
@@ -273,8 +270,7 @@ public class MenuFunctions {
         //   if (Validator.correctId(id)) {
         if (!(Integer.parseInt(id) < 0)) { //&& !(Integer.parseInt(id) > getCompanies().size())) {
             isAppropriateNumber = true;
-        }
-        else {
+        } else {
             System.out.println("Такого ID нет!");
         }
        /* }
@@ -288,12 +284,11 @@ public class MenuFunctions {
         List<Company> companies = getCompanies();
         if (companies.size() != 0) {
             theHeaderForCompany();
-            for (Company c: companies) {
+            for (Company c : companies) {
                 theTableForCompany(c);
             }
             System.out.println(" ");
-        }
-        else {
+        } else {
             System.out.println("Нет компаний!");
         }
     }
@@ -301,11 +296,11 @@ public class MenuFunctions {
     private void theTableForCompany(Company c) {
         System.out.println(" ");
         System.out.format("%10s%20s%30s", c.getCompanyId() + " |", c.getCompanyName() + " |", c.getCompanyCountry() + " |");
-        System.out.println(" ");
+        //System.out.println(" ");
     }
 
     private void theHeaderForCompany() {
-        System.out.format("%10s%20s%30s"," ID |", "Название |", "Страна происхождения |");
+        System.out.format("%10s%20s%30s", " ID |", "Название |", "Страна происхождения |");
     }
 
     private List<Company> getCompanies() {
@@ -334,8 +329,7 @@ public class MenuFunctions {
         Company company = null;
         if (isFound) {
             company = companyService.findCompanyByName(name);
-        }
-        else {
+        } else {
             System.out.println("Такой компании не найдено!");
         }
         return company;
@@ -351,10 +345,12 @@ public class MenuFunctions {
         Car car = getCarInfo();
         if (car != null) {
             Company company = companyService.findCompanyById(Integer.parseInt(id));
-            car.setCompany(company);
-            company.addCar(car);
-            if (companyService.updateCompany(company)) {
-                System.out.println("---Добавление выполнено!---");
+            if (company != null) {
+                car.setCompany(company);
+                company.addCar(car);
+                if (companyService.updateCompany(company)) {
+                    System.out.println("---Добавление выполнено!---");
+                }
             }
         }
     }
@@ -438,8 +434,7 @@ public class MenuFunctions {
                 car.setFuel(fuel);
                 car.setFuelConsumption(fuelConsumption);
                 car.setPrice(Integer.parseInt(price));
-            }
-            else {
+            } else {
                 System.out.println("Введите топливо: Бензин или Дизель!");
             }
                /* }
@@ -493,8 +488,7 @@ public class MenuFunctions {
                     theTableForCar(c);
                 }
                 System.out.println(" ");
-            }
-            else {
+            } else {
                 System.out.println("Компания " + company.getCompanyName() + " не имеет моделей!");
             }
         }
@@ -504,7 +498,7 @@ public class MenuFunctions {
         List<Company> companies = getCompanies();
         if (companies.size() != 0) {
             theHeaderForCar();
-            for (Company c: companies) {
+            for (Company c : companies) {
                 List<Car> cars = c.getCars();
                 if (!cars.isEmpty()) {
                     for (Car car : cars) {
@@ -514,8 +508,7 @@ public class MenuFunctions {
                 }
 
             }
-        }
-        else {
+        } else {
             System.out.println("Нет машин!");
         }
     }

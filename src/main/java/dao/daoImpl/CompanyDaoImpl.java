@@ -2,9 +2,12 @@ package dao.daoImpl;
 
 import dao.CompanyDao;
 import entity.Company;
+import exception.ShowException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import sessionFactory.SessionFactoryImpl;
+
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -86,6 +89,9 @@ public class CompanyDaoImpl implements CompanyDao {
         }
         catch (NoClassDefFoundError e) {
             System.out.println("Exception: " + e);
+        }
+        catch (NoResultException e) {
+            ShowException.companyNotFound(e);
         }
         return company;
     }

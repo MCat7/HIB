@@ -62,7 +62,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<Company> showCompanies() {
-        System.out.println("Это ДЗ (готово)");
+        System.out.println("Это ДЗ showCompanies (готово)");
         List<Company> companies = (List<Company>) SessionFactoryImpl.getSessionFactory().openSession().createQuery("FROM Company").list();
         return companies;
 
