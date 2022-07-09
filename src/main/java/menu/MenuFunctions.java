@@ -8,6 +8,7 @@ import service.CompanyService;
 import service.PersonService;
 import service.serviceImpl.CompanyServiceImpl;
 import service.serviceImpl.PersonServiceImpl;
+import validator.Validator;
 //import validator.Validator;
 
 import java.util.List;
@@ -19,7 +20,8 @@ public class MenuFunctions {
     PersonService personService = new PersonServiceImpl();
     CompanyService companyService = new CompanyServiceImpl();
 
-    public MenuFunctions() { }
+    public MenuFunctions() {
+    }
 
     //---PERSON AND USER---//
 
@@ -45,20 +47,19 @@ public class MenuFunctions {
         String phone = in.nextLine();
         System.out.print("Введите почту пользователя: ");
         String mail = in.nextLine();
-        //if (Validator.correctPerson(name, surname, age, phone, mail)) {
+        if (Validator.correctPerson(name, surname, age, phone, mail)) {
         User user = getUserInfo();
         if (user != null) {
             person = new Person(name, surname, Integer.parseInt(age), phone, mail);
             user.setPerson(person);
             person.setUser(user);
-        }
-        else {
+        } else {
             System.out.println("Пароль или логин не корректны!");
         }
-      /*  }
+        }
         else {
             System.out.println("Личные данные не корректны!");
-        }*/
+        }
         return person;
     }
 
@@ -68,14 +69,13 @@ public class MenuFunctions {
         String login = in.nextLine();
         System.out.print("Введите пароль пользователя: ");
         String password = in.nextLine();
-        //  if(Validator.correctUser(login, password)) {
-        if(checkUniqueLogin(login)) {
+        if(Validator.correctUser(login, password)) {
+        if (checkUniqueLogin(login)) {
             user = new User(login, password, "User");
-        }
-        else {
+        } else {
             System.out.println("Такой логин уже занят!");
         }
-        //}
+        }
         return user;
     }
 
@@ -117,16 +117,16 @@ public class MenuFunctions {
         String phone = in.nextLine();
         System.out.print("Введите почту пользователя: ");
         String mail = in.nextLine();
-        //  if (Validator.correctPerson(name, surname, age, phone, mail)) {
+        if (Validator.correctPerson(name, surname, age, phone, mail)) {
         person.setName(name);
         person.setSurname(surname);
         person.setAge(Integer.parseInt(age));
         person.setPhone(phone);
         person.setMail(mail);
-       /* }
+       }
         else {
             System.out.println("Личные данные не корректны!");
-        }*/
+        }
         return person;
     }
 
@@ -136,10 +136,10 @@ public class MenuFunctions {
         String login = in.nextLine();
         System.out.print("Введите пароль пользователя: ");
         String password = in.nextLine();
-        //   if(Validator.correctUser(login, password)) {
+           if(Validator.correctUser(login, password)) {
         person.getUser().setLogin(login);
         person.getUser().setPassword(password);
-        // }
+         }
         return person;
     }
 
@@ -166,17 +166,16 @@ public class MenuFunctions {
 
     private boolean getPersonId(String id) {
         boolean isAppropriateNumber = false;
-        //   if (Validator.correctId(id)) {
-        if (!(Integer.parseInt(id) < 0) && !(Integer.parseInt(id) > getPeople().size())) {
+           if (Validator.correctId(id)) {
+        if (!(Integer.parseInt(id) < 0)) { // && !(Integer.parseInt(id) > getPeople().size())) {
             isAppropriateNumber = true;
-        }
-        else {
+        } else {
             System.out.println("Такого ID нет!");
         }
-       /* }
+        }
         else {
             System.out.println("ID не корректно!");
-        }*/
+        }
         return isAppropriateNumber;
     }
 
@@ -184,7 +183,7 @@ public class MenuFunctions {
         List<Person> people = getPeople();
         if (people.size() != 0) {
             System.out.format("%10s%20s%20s%10s%20s%30s%20s", "ID |", "Имя |", "Фамилия |", "Возраст |", "Телефон |", "Почта |", "Логин |");
-            for (Person p: people) {
+            for (Person p : people) {
                 System.out.println(" ");
                 System.out.format("%10s%20s%20s%10s%20s%30s%20s", p.getPersonId() + " |", p.getName() + " |",
                         p.getSurname() + " |", p.getAge() + " |",
@@ -192,8 +191,7 @@ public class MenuFunctions {
 
             }
             System.out.println(" ");
-        }
-        else {
+        } else {
             System.out.println("Нет пользователей!");
         }
     }
@@ -217,15 +215,15 @@ public class MenuFunctions {
         String name = in.nextLine();
         System.out.print("Введите страну происхождения компании: ");
         String country = in.nextLine();
-        //  if (Validator.correctCompany(name, country)) {
+          if (Validator.correctCompany(name, country)) {
         Company company = new Company(name, country);
         if (companyService.addCompany(company)) {
             result = "---Добавление выполнено!---";
         }
-      /*  }
+        }
         else {
             result = "Данные не корректны!";
-        }*/
+        }
         return result;
     }
 
@@ -240,17 +238,17 @@ public class MenuFunctions {
             String name = in.nextLine();
             System.out.print("Введите страну происхождения компании: ");
             String country = in.nextLine();
-            //     if (Validator.correctCompany(name, country)) {
+                 if (Validator.correctCompany(name, country)) {
             Company company = companyService.findCompanyById(Integer.parseInt(id));
             company.setCompanyName(name);
             company.setCompanyCountry(country);
             if (companyService.updateCompany(company)) {
                 System.out.println("---Изменение выполнено!---");
             }
-          /*  }
+            }
             else {
                 System.out.println("Данные не корректны!");
-            }*/
+            }
         }
 
         return result;
@@ -262,7 +260,7 @@ public class MenuFunctions {
         System.out.print("Введите ID компании для удаления: ");
         String id = in.nextLine();
         if (getCompanyId(id)) {
-            if(companyService.deleteCompany(Integer.parseInt(id))) {
+            if (companyService.deleteCompany(Integer.parseInt(id))) {
                 System.out.println("---Удаление выполнено!---");
             }
         }
@@ -270,17 +268,16 @@ public class MenuFunctions {
 
     private boolean getCompanyId(String id) {
         boolean isAppropriateNumber = false;
-        //   if (Validator.correctId(id)) {
-        if (!(Integer.parseInt(id) < 0) && !(Integer.parseInt(id) > getCompanies().size())) {
+           if (Validator.correctId(id)) {
+        if (!(Integer.parseInt(id) < 0)) { //&& !(Integer.parseInt(id) > getCompanies().size())) {
             isAppropriateNumber = true;
-        }
-        else {
+        } else {
             System.out.println("Такого ID нет!");
         }
-       /* }
+        }
         else {
             System.out.println("ID не корректно!");
-        }*/
+        }
         return isAppropriateNumber;
     }
 
@@ -288,12 +285,11 @@ public class MenuFunctions {
         List<Company> companies = getCompanies();
         if (companies.size() != 0) {
             theHeaderForCompany();
-            for (Company c: companies) {
+            for (Company c : companies) {
                 theTableForCompany(c);
             }
             System.out.println(" ");
-        }
-        else {
+        } else {
             System.out.println("Нет компаний!");
         }
     }
@@ -301,11 +297,11 @@ public class MenuFunctions {
     private void theTableForCompany(Company c) {
         System.out.println(" ");
         System.out.format("%10s%20s%30s", c.getCompanyId() + " |", c.getCompanyName() + " |", c.getCompanyCountry() + " |");
-        System.out.println(" ");
+        //System.out.println(" ");
     }
 
     private void theHeaderForCompany() {
-        System.out.format("%10s%20s%30s"," ID |", "Название |", "Страна происхождения |");
+        System.out.format("%10s%20s%30s", " ID |", "Название |", "Страна происхождения |");
     }
 
     private List<Company> getCompanies() {
@@ -326,15 +322,15 @@ public class MenuFunctions {
         String name = in.nextLine();
         boolean isFound = false;
         for (Company c : getCompanies()) {
-            if (c.getCompanyName().equals(name)) {
+            if (c.getCompanyName().toLowerCase().contains(name.toLowerCase())) {
                 isFound = true;
+                name = c.getCompanyName();
             }
         }
         Company company = null;
         if (isFound) {
             company = companyService.findCompanyByName(name);
-        }
-        else {
+        } else {
             System.out.println("Такой компании не найдено!");
         }
         return company;
@@ -350,10 +346,12 @@ public class MenuFunctions {
         Car car = getCarInfo();
         if (car != null) {
             Company company = companyService.findCompanyById(Integer.parseInt(id));
-            car.setCompany(company);
-            company.addCar(car);
-            if (companyService.updateCompany(company)) {
-                System.out.println("---Добавление выполнено!---");
+            if (company != null) {
+                car.setCompany(company);
+                company.addCar(car);
+                if (companyService.updateCompany(company)) {
+                    System.out.println("---Добавление выполнено!---");
+                }
             }
         }
     }
@@ -371,8 +369,8 @@ public class MenuFunctions {
         String fuelConsumption = in.nextLine();
         System.out.print("Введите цену: ");
         String price = in.nextLine();
-        // if (Validator.correctCar(name, year, distance, fuel, fuelConsumption, price)) {
-        //     if (Validator.correctFuel(fuel)) {
+         if (Validator.correctCar(name, year, distance, fuel, fuelConsumption, price)) {
+             if (Validator.correctFuel(fuel)) {
         Car car = new Car();
         car.setName(name);
         car.setYear(Integer.parseInt(year));
@@ -381,14 +379,15 @@ public class MenuFunctions {
         car.setFuelConsumption(fuelConsumption);
         car.setPrice(Integer.parseInt(price));
         return car;
-          /*  }
+            }
             else {
                 System.out.println("Введите топливо: Бензин или Дизель!");
-            }*/
-       /* }
+            }
+        }
         else {
             System.out.println("Данные не корректны!");
-        }*/
+        }
+        return null;
     }
 
     public void deleteCar() {
@@ -429,26 +428,25 @@ public class MenuFunctions {
                 String fuelConsumption = in.nextLine();
                 System.out.print("Введите цену: ");
                 String price = in.nextLine();
-              /*  if (Validator.correctCar(name, year, distance, fuel, fuelConsumption, price)) {
-                    if (Validator.correctFuel(fuel)) {*/
+                if (Validator.correctCar(name, year, distance, fuel, fuelConsumption, price)) {
+                    if (Validator.correctFuel(fuel)) {
                 car.setName(name);
                 car.setYear(Integer.parseInt(year));
                 car.setDistance(Integer.parseInt(distance));
                 car.setFuel(fuel);
                 car.setFuelConsumption(fuelConsumption);
                 car.setPrice(Integer.parseInt(price));
-            }
-            else {
+            } else {
                 System.out.println("Введите топливо: Бензин или Дизель!");
             }
-               /* }
+                }
                 else {
                     System.out.println("Данные не корректны!");
                 }
                 if (companyService.updateCompany(company)) {
                     System.out.println("---Изменение выполнено!---");
-                }*/
-            // }
+                }
+             }
         }
     }
 
@@ -492,8 +490,7 @@ public class MenuFunctions {
                     theTableForCar(c);
                 }
                 System.out.println(" ");
-            }
-            else {
+            } else {
                 System.out.println("Компания " + company.getCompanyName() + " не имеет моделей!");
             }
         }
@@ -503,7 +500,7 @@ public class MenuFunctions {
         List<Company> companies = getCompanies();
         if (companies.size() != 0) {
             theHeaderForCar();
-            for (Company c: companies) {
+            for (Company c : companies) {
                 List<Car> cars = c.getCars();
                 if (!cars.isEmpty()) {
                     for (Car car : cars) {
@@ -513,9 +510,8 @@ public class MenuFunctions {
                 }
 
             }
-        }
-        else {
-            System.out.println("Нет пользователей!");
+        } else {
+            System.out.println("Нет машин!");
         }
     }
 

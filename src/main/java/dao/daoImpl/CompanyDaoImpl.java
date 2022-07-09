@@ -2,9 +2,12 @@ package dao.daoImpl;
 
 import dao.CompanyDao;
 import entity.Company;
+import exception.ShowException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import sessionFactory.SessionFactoryImpl;
+
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -37,6 +40,11 @@ public class CompanyDaoImpl implements CompanyDao {
         boolean isUpdated = false;
         try {
             // Тут нужно обновление
+            Session session = SessionFactoryImpl.getSessionFactory().openSession();
+            Transaction tx = session.beginTransaction();
+            session.update(company);
+            tx.commit();
+            session.close();
             isUpdated = true;
         }
         catch (NoClassDefFoundError e) {
@@ -50,6 +58,12 @@ public class CompanyDaoImpl implements CompanyDao {
         boolean isDeleted = false;
         try {
             // Тут нужно удаление
+            Session session = SessionFactoryImpl.getSessionFactory().openSession();
+            Company company = session.load(Company.class, id);
+            Transaction tx = session.beginTransaction();
+            session.delete(company);
+            tx.commit();
+            session.close();
             isDeleted = true;
         }
         catch (NoClassDefFoundError e) {
@@ -63,9 +77,21 @@ public class CompanyDaoImpl implements CompanyDao {
         Company company = null;
         try {
             //Тут нужен поиск
+            Session session = SessionFactoryImpl.getSessionFactory().openSession();
+            Transaction tx  = session.beginTransaction();
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Company> cr = cb.createQuery(Company.class);
+            Root<Company> root = cr.from(Company.class);
+            cr.select(root).where(cb.equal(root.get("companyId"), id));
+            company = session.createQuery(cr).getSingleResult();
+            tx.commit();
+            session.close();
         }
         catch (NoClassDefFoundError e) {
             System.out.println("Exception: " + e);
+        }
+        catch (NoResultException e) {
+            ShowException.companyNotFound(e);
         }
         return company;
     }
@@ -74,7 +100,15 @@ public class CompanyDaoImpl implements CompanyDao {
     public Company findCompanyByName(String name) {
         Company company = null;
         try {
-            // Тут нужен поиск по имени
+            Session session = SessionFactoryImpl.getSessionFactory().openSession();
+            Transaction tx = session.beginTransaction();
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Company> cr = cb.createQuery(Company.class);
+            Root<Company> root = cr.from(Company.class);
+            cr.select(root).where(cb.equal(root.get("companyName"), name));
+            company = session.createQuery(cr).getSingleResult();
+            tx.commit();
+            session.close();
         }
         catch (NoClassDefFoundError e) {
             System.out.println("Exception: " + e);
